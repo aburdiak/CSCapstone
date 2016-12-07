@@ -10,7 +10,7 @@ from django.db.models.signals import post_save
 
 # Create your models here.
 class MyUserManager(BaseUserManager):
-    def create_user(self, email=None, password=None, first_name=None, last_name=None, is_student=False, is_teacher=False, is_engineer=False):
+    def create_user(self, email=None, password=None, first_name=None, last_name=None, is_student=False, is_professor=False, is_engineer=False):
         if not email:
             raise ValueError('Users must have an email address')
         print "In create user"
@@ -24,7 +24,7 @@ class MyUserManager(BaseUserManager):
 	user.first_name = first_name
 	user.last_name = last_name
 	user.is_student = is_student
-	user.is_teacher = is_teacher
+	user.is_professor = is_professor
 	user.is_engineer = is_engineer
 
         #If first_name is not present, set it as email's username by default
@@ -93,6 +93,15 @@ class MyUser(AbstractBaseUser):
     def has_module_perms(self, app_label):        
         return True
 
+    def get_role(self):
+        if self.is_student == True:
+            return 'student'
+        elif self.is_professor == True:
+            return 'professor'
+        elif self.is_engineer == True:
+            return 'engineer'
+
+
     @property
     def is_staff(self):
         return self.is_admin
@@ -133,7 +142,7 @@ class Student(models.Model):
     def is_staff(self):
         return False
 
-class Teacher(models.Model):
+class Professor(models.Model):
     user = models.OneToOneField(
         MyUser,
         on_delete=models.CASCADE,

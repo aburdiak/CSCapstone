@@ -22,7 +22,7 @@ class RegisterForm(forms.Form):
     lastname = forms.CharField(label="Last name", widget=forms.TextInput, required=False)
 
     CHOICES=[('student', 'Student'),
-             ('teacher', 'Teacher'),
+             ('professor', 'Professor'),
               ('engineer', 'Engineer')]
 
     role = forms.ChoiceField(label="Role", choices=CHOICES, widget=forms.RadioSelect(), required=False)
@@ -46,26 +46,30 @@ class RegisterForm(forms.Form):
         except:
             raise forms.ValidationError("There was an error, please contact us later")
 
-class UpdateForm(forms.ModelForm):
+
+class UpdateFormStudent(forms.ModelForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
     password hash display field.
     """
     password = ReadOnlyPasswordHashField()
+    print "Student update form"
+
+    role = forms.CharField(label="Role", initial="Student")
 
     class Meta:
-        model = MyUser        
+        model = MyUser
         fields = ('email', 'password', 'first_name', 'last_name')
 
-    def clean_password(self):            
+    def clean_password(self):
         return self.initial["password"]
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
-        #Check is email has changed
+        # Check is email has changed
         if email == self.initial["email"]:
             return email
-        #Check if email exists before
+        # Check if email exists before
         try:
             exists = MyUser.objects.get(email=email)
             raise forms.ValidationError("This email has already been taken")
@@ -76,12 +80,91 @@ class UpdateForm(forms.ModelForm):
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get("first_name")
-        #Check is email has changed
-        if first_name is None or first_name == "" or first_name == '':  
-            email = self.cleaned_data.get("email")                               
-            return email[:email.find("@")]      
+        # Check is email has changed
+        if first_name is None or first_name == "" or first_name == '':
+            email = self.cleaned_data.get("email")
+            return email[:email.find("@")]
         return first_name
-   
+
+
+class UpdateFormProfessor(forms.ModelForm):
+    """A form for updating users. Includes all the fields on
+    the user, but replaces the password field with admin's
+    password hash display field.
+    """
+    password = ReadOnlyPasswordHashField()
+    print "Professor update form"
+
+    role = forms.CharField(label="Role", initial="Professor")
+
+    class Meta:
+        model = MyUser
+        fields = ('email', 'password', 'first_name', 'last_name')
+
+    def clean_password(self):
+        return self.initial["password"]
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        # Check is email has changed
+        if email == self.initial["email"]:
+            return email
+        # Check if email exists before
+        try:
+            exists = MyUser.objects.get(email=email)
+            raise forms.ValidationError("This email has already been taken")
+        except MyUser.DoesNotExist:
+            return email
+        except:
+            raise forms.ValidationError("There was an error, please contact us later")
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get("first_name")
+        # Check is email has changed
+        if first_name is None or first_name == "" or first_name == '':
+            email = self.cleaned_data.get("email")
+            return email[:email.find("@")]
+        return first_name
+
+
+class UpdateFormEngineer(forms.ModelForm):
+    """A form for updating users. Includes all the fields on
+    the user, but replaces the password field with admin's
+    password hash display field.
+    """
+    password = ReadOnlyPasswordHashField()
+    print "Engineer update form"
+
+    role = forms.CharField(label="Role", initial="Engineer")
+
+    class Meta:
+        model = MyUser
+        fields = ('email', 'password', 'first_name', 'last_name')
+
+    def clean_password(self):
+        return self.initial["password"]
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        # Check is email has changed
+        if email == self.initial["email"]:
+            return email
+        # Check if email exists before
+        try:
+            exists = MyUser.objects.get(email=email)
+            raise forms.ValidationError("This email has already been taken")
+        except MyUser.DoesNotExist:
+            return email
+        except:
+            raise forms.ValidationError("There was an error, please contact us later")
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get("first_name")
+        # Check is email has changed
+        if first_name is None or first_name == "" or first_name == '':
+            email = self.cleaned_data.get("email")
+            return email[:email.find("@")]
+        return first_name
 
 
 """Admin Forms"""

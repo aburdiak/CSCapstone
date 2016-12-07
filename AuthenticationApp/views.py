@@ -10,8 +10,8 @@ from django.shortcuts import render
 from django.contrib import messages
 
 
-from .forms import LoginForm, RegisterForm, UpdateForm
-from .models import MyUser, Student, Teacher, Engineer
+from .forms import LoginForm, RegisterForm, UpdateFormStudent, UpdateFormEngineer, UpdateFormProfessor
+from .models import MyUser, Student, Professor, Engineer
 
 # Auth Views
 
@@ -56,12 +56,12 @@ def auth_register(request):
 
         role = form.cleaned_data['role']
         student = False
-        teacher = False
+        professor = False
         engineer = False
         if role == 'student':
             student = True
-        elif role == 'teacher':
-            teacher = True
+        elif role == 'professor':
+            professor = True
         elif role == 'engineer':
             engineer = True
         else:
@@ -71,9 +71,9 @@ def auth_register(request):
 	print "pre instantiation " + form.cleaned_data['role']
 
         new_user = MyUser.objects.create_user(email=form.cleaned_data['email'],
-            password=form.cleaned_data["password2"],
-            first_name=form.cleaned_data['firstname'], last_name=form.cleaned_data['lastname'],
-            is_student=student, is_teacher=teacher, is_engineer=engineer)
+                                              password=form.cleaned_data["password2"],
+                                              first_name=form.cleaned_data['firstname'], last_name=form.cleaned_data['lastname'],
+                                              is_student=student, is_professor=professor, is_engineer=engineer)
 
         print "post instatiation " + form.cleaned_data['firstname']
         #print "post instantiation " + new_user.first_name
@@ -82,9 +82,9 @@ def auth_register(request):
         if role == 'student':
             new_student = Student(user = new_user)
 	    new_student.save()
-        elif role == 'teacher':
-            new_teacher = Teacher(user = new_user)
-            new_teacher.save()
+        elif role == 'professor':
+            new_professor = Professor(user = new_user)
+            new_professor.save()
         elif role == 'engineer':
             new_enginer = Engineer(user = new_user)
             new_enginer.save()
@@ -93,8 +93,8 @@ def auth_register(request):
         login(request, new_user);
         if role == 'student':
             messages.success(request, 'Success! Your student account was created.')
-        elif role == 'teacher':
-            messages.success(request, 'Success! Your teacher account was created.')
+        elif role == 'professor':
+            messages.success(request, 'Success! Your professor account was created.')
         elif role == 'engineer':
             messages.success(request, 'Success! Your engineer account was created.')
         messages.success(request, 'Success! Your account was created.')
@@ -110,15 +110,27 @@ def auth_register(request):
 
 @login_required
 def update_profile(request):
-	form = UpdateForm(request.POST or None, instance=request.user)
-	if form.is_valid():
-		form.save()
-		messages.success(request, 'Success, your profile was saved!')
+    print "In update profile"
+    if MyUser.get_role(request.user) == 'student':
+        form = UpdateFormStudent(request.POST or None, instance=request.user)
+        print "Set student from"
+    elif MyUser.get_role(request.user) == 'professor':
+        form = UpdateFormProfessor(request.POST or None, instance=request.user)
+        print "Set Professor form"
+    elif MyUser.get_role(request.user) == 'engineer':
+        form = UpdateFormEngineer(request.POST or None, instance=request.user)
+        print "Set Engineer form"
 
-	context = {
-		"form": form,
-		"page_name" : "Update",
-		"button_value" : "Update",
-		"links" : ["logout"],
-	}
-	return render(request, 'auth_form.html', context)
+    print "After Conditionals"
+
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Success, your profile was saved!')
+
+    context = {
+        "form": form,
+        "page_name" : "Update",
+        "button_value" : "Update",
+        "links" : ["logout"],
+    }
+    return render(request, 'auth_form.html', context)
