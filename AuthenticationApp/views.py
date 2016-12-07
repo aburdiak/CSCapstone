@@ -50,6 +50,10 @@ def auth_register(request):
 
     form = RegisterForm(request.POST or None)
     if form.is_valid():
+
+        ## Something about the following block of code causes issues setting the user name
+        ## Current issue is unable to set user name and role status in database and other places
+
         role = form.cleaned_data['role']
         student = False
         teacher = False
@@ -58,8 +62,10 @@ def auth_register(request):
             student = True
         elif role == 'teacher':
             teacher = True
-        elif role ==  'engineer':
+        elif role == 'engineer':
             engineer = True
+        else:
+            print "No role selected"
 
         new_user = MyUser.objects.create_user(email=form.cleaned_data['email'],
             password=form.cleaned_data["password2"],
@@ -67,7 +73,7 @@ def auth_register(request):
             is_student=student, is_teacher=teacher, is_engineer=engineer)
 
         print form.cleaned_data['firstname']
-        print new_user.first_name
+        print new_user.is_student
         new_user.save()
         #Also registering students
         if role == 'student':
@@ -79,6 +85,8 @@ def auth_register(request):
         elif role == 'engineer':
             new_enginer = Engineer(user = new_user)
             new_enginer.save()
+        print new_user.get_full_name()
+        print new_student.get_full_name()
         login(request, new_user);
         if role == 'student':
             messages.success(request, 'Success! Your student account was created.')

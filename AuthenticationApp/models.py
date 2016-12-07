@@ -13,7 +13,8 @@ class MyUserManager(BaseUserManager):
     def create_user(self, email=None, password=None, first_name=None, last_name=None, is_student=False, is_teacher=False, is_engineer=False):
         if not email:
             raise ValueError('Users must have an email address')
-
+        print "In create user"
+        print first_name
         #We can safetly create the user
         #Only the email field is required
         user = self.model(email=email)
@@ -24,6 +25,8 @@ class MyUserManager(BaseUserManager):
             user.first_name = email[:email.find("@")]            
         
         user.save(using=self._db)
+        print "End of create user"
+        print first_name
         return user
 
     def create_superuser(self, email=None, password=None, first_name=None, last_name=None):
@@ -41,16 +44,16 @@ class MyUser(AbstractBaseUser):
     )
 
     first_name = models.CharField(
-    	max_length=120,
-    	null=True,
-    	blank=True,
-    	)    
+        max_length=120,
+        null=True,
+        blank=True,
+        )
 
     last_name = models.CharField(
-    	max_length=120,
-    	null=True,
-    	blank=True,
-    	)
+        max_length=120,
+        null=True,
+        blank=True,
+        )
 
     is_active = models.BooleanField(default=True,)
     is_admin = models.BooleanField(default=False,)
