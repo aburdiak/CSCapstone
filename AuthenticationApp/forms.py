@@ -19,7 +19,13 @@ class RegisterForm(forms.Form):
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput, required=True)    
 
     firstname = forms.CharField(label="First name", widget=forms.TextInput, required=False)
-    lastname = forms.CharField(label="Last name", widget=forms.TextInput, required=False)               
+    lastname = forms.CharField(label="Last name", widget=forms.TextInput, required=False)
+
+    CHOICES=[('student', 'Student'),
+             ('teacher', 'Teacher'),
+              ('engineer', 'Engineer')]
+
+    role = forms.ChoiceField(label="Role", choices=CHOICES, widget=forms.RadioSelect(), required=False)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -52,7 +58,7 @@ class UpdateForm(forms.ModelForm):
         fields = ('email', 'password', 'first_name', 'last_name')
 
     def clean_password(self):            
-        return self.initial["password"]        
+        return self.initial["password"]
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
