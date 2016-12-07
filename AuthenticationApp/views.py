@@ -67,18 +67,21 @@ def auth_register(request):
         else:
             print "No role selected"
 
+	print "pre instantiation " + form.cleaned_data['firstname']
+	print "pre instantiation " + form.cleaned_data['role']
+
         new_user = MyUser.objects.create_user(email=form.cleaned_data['email'],
             password=form.cleaned_data["password2"],
             first_name=form.cleaned_data['firstname'], last_name=form.cleaned_data['lastname'],
             is_student=student, is_teacher=teacher, is_engineer=engineer)
 
-        print form.cleaned_data['firstname']
-        print new_user.is_student
+        print "post instatiation " + form.cleaned_data['firstname']
+        #print "post instantiation " + new_user.first_name
         new_user.save()
         #Also registering students
         if role == 'student':
             new_student = Student(user = new_user)
-            new_student.save()
+	    new_student.save()
         elif role == 'teacher':
             new_teacher = Teacher(user = new_user)
             new_teacher.save()
@@ -86,7 +89,7 @@ def auth_register(request):
             new_enginer = Engineer(user = new_user)
             new_enginer.save()
         print new_user.get_full_name()
-        print new_student.get_full_name()
+        #print new_student.get_full_name()
         login(request, new_user);
         if role == 'student':
             messages.success(request, 'Success! Your student account was created.')

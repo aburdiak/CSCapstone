@@ -15,10 +15,17 @@ class MyUserManager(BaseUserManager):
             raise ValueError('Users must have an email address')
         print "In create user"
         print first_name
+	print last_name
         #We can safetly create the user
         #Only the email field is required
         user = self.model(email=email)
         user.set_password(password)
+
+	user.first_name = first_name
+	user.last_name = last_name
+	user.is_student = is_student
+	user.is_teacher = is_teacher
+	user.is_engineer = is_engineer
 
         #If first_name is not present, set it as email's username by default
         if first_name is None or first_name == "" or first_name == '':                                
