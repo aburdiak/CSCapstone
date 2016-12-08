@@ -3,27 +3,38 @@
 {% block content %}
 	<!-- Content -->
     <div class="container theme-showcase" role="main">
-		<div class="jumbotron">
-            <img src="/{{ university.photo }}" alt="University Image" width=150/>
+
+    <img src="/{{ university.photo }}" alt="University Image" width=150/>
 			<h2>{{ course.tag }}</h2>
 			<h3>{{ course.name }}</h3>
 			<p>{{ course.description }}</p>
-            {% if userIsProfessor == False  %}
-		{% if userInCourse %}
-                	<a href="/university/course/unjoin?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Unjoin this Course</a>
+            	{% if userIsProfessor == False  %}
+			{% if userInCourse %}
+                		<a href="/university/course/unjoin?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Unjoin this Course</a>
                 	
 
-		{% else %}
+			{% else %}
     	    
-                	<a href="/university/course/join?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Join this Course</a>
-                {% endif %}
-	    {% endif %}
-			{% if userIsProfessor %}
-				<a href="/university/course/remove?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Delete this Course</a>
-    				{{ form.as_p }}
+                		<a href="/university/course/join?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Join this Course</a>
+                
+	   		{% endif %}
+	     	{% elif userIsProfessor %}
+				<a href="/university/course/addstudent?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Add a Student by Email</a>
+    			
+				<br>
+				<br>
+				<br>	
+				<div class="panel panel-default">
+					<form method="POST" class="panel-body validate"> {% csrf_token %}
+						
+						{{ form.as_p }}
 
-	    		{% endif %}
-		</div>
+						<input type="submit" class='btn btn-primary' value="Submit">
+
+					</form>
+				</div>
+	    	{% endif %}
+	    
     </div>
     <div class="container" role="main">
 		<div class="table-responsive">
@@ -42,6 +53,6 @@
 				</tbody>
 			</table>
 		</div>
-	</div>
+    </div>
 	
 {% endblock %}

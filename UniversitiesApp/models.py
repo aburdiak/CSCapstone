@@ -27,3 +27,9 @@ class Course(models.Model):
 
 	def __str__(self):
 		return self.name
+
+class AddStudent(models.Model):
+	email = models.CharField(max_length=200)
+
+	def __str__(self):
+		return self.name

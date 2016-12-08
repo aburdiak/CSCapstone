@@ -9,7 +9,9 @@ from . import models
 from . import forms
 from AuthenticationApp.models import Student
 from AuthenticationApp.models import Professor
+from AuthenticationApp.models import MyUser
 from .models import University
+from django.contrib import messages
 
 def getUniversities(request):
     if request.user.is_authenticated():
@@ -237,15 +239,47 @@ def unjoinCourse(request):
 def addStudent(request):
     if request.user.is_authenticated():
     	if request.user.is_professor:
-    	    if request.method == 'POST':
-    	        form = forms.addStudentForm(request.POST)
+    	    print "test test"
+	    if request.method == 'POST':
+    	        form = forms.AddStudentForm(request.POST)
 		if form.is_valid():
-
-		    student_email = form.cleaned_data['student email']
 		    
+		    student_email = form.cleaned_data['student email']
+		    student_obj = MyUser.objects.get(email__exact=student_email)
+		    
+		    university_name = request.GET.get('name')
+		    course_name = request.GET.get('course')
+
+		    print student_email
+
+		    if student_obj.exists() and student_obj.is_student:
+			print "email match"
+			student_data = student_obj.values_list()		   
+		    	student_id = student_data[0]
+		    	
+			university_obj = University.objects.get(name__exact=university_name)
+			course_obj = university_obj.objects.get(tag__exect=course_name)
+
+			course_obj.members.add(student_obj)
+			student_obj = course_set.add(course_obj)		
+			student_obj.save()
+			course_obj.save()
+					
+ 			return render(request, 'course.html')
+
+		    else:
+		    	messages.warning(request, 'Student does not exist')
+
 		else:
 		    return render(request, 'autherror.html')
+	    else:
 
+		print "test"
+		form = forms.AddStudentForm()
+		context = {
+			"form": form,
+		}
+		return render(request, 'course.html', context)    
     	else:
     	    return render(request, 'autherror.html');
     else:
