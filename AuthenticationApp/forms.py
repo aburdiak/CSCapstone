@@ -55,7 +55,7 @@ class UpdateFormStudent(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
     print "Student update form"
 
-    role = forms.CharField(label="Role", initial="Student")
+    #role = forms.CharField(label="Role", initial="Student")
 
     class Meta:
         model = MyUser
@@ -95,7 +95,8 @@ class UpdateFormProfessor(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
     print "Professor update form"
 
-    role = forms.CharField(label="Role", initial="Professor")
+    #role = forms.CharField(label="Role", initial="Professor")
+    phone_number = forms.CharField(label="Phone Number", widget=forms.TextInput, required=False)
 
     class Meta:
         model = MyUser
@@ -135,8 +136,8 @@ class UpdateFormEngineer(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
     print "Engineer update form"
 
-    role = forms.CharField(label="Role", initial="Engineer")
-
+    #role = forms.CharField(label="Role", initial="Engineer")
+    alma_mater = forms.CharField(label="Alma Mater", widget=forms.TextInput, required=False)
     class Meta:
         model = MyUser
         fields = ('email', 'password', 'first_name', 'last_name')

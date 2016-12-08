@@ -67,8 +67,8 @@ def auth_register(request):
         else:
             print "No role selected"
 
-	print "pre instantiation " + form.cleaned_data['firstname']
-	print "pre instantiation " + form.cleaned_data['role']
+	    print "pre instantiation " + form.cleaned_data['firstname']
+	    print "pre instantiation " + form.cleaned_data['role']
 
         new_user = MyUser.objects.create_user(email=form.cleaned_data['email'],
                                               password=form.cleaned_data["password2"],
@@ -81,7 +81,7 @@ def auth_register(request):
         #Also registering students
         if role == 'student':
             new_student = Student(user = new_user)
-	    new_student.save()
+            new_student.save()
         elif role == 'professor':
             new_professor = Professor(user = new_user)
             new_professor.save()
@@ -111,15 +111,18 @@ def auth_register(request):
 @login_required
 def update_profile(request):
     print "In update profile"
-    if MyUser.get_role(request.user) == 'student':
+    role = MyUser.get_role(request.user)
+    if role == 'student':
         form = UpdateFormStudent(request.POST or None, instance=request.user)
         print "Set student from"
-    elif MyUser.get_role(request.user) == 'professor':
+    elif role == 'professor':
         form = UpdateFormProfessor(request.POST or None, instance=request.user)
         print "Set Professor form"
-    elif MyUser.get_role(request.user) == 'engineer':
+        Professor.setPhoneNumber(form.cleaned_data['phone_number'])
+    elif role == 'engineer':
         form = UpdateFormEngineer(request.POST or None, instance=request.user)
         print "Set Engineer form"
+        Engineer.setAlmaMater(form.cleaned_data['alma_mater'])
 
     print "After Conditionals"
 
@@ -131,6 +134,7 @@ def update_profile(request):
         "form": form,
         "page_name" : "Update",
         "button_value" : "Update",
+        "role" : role,
         "links" : ["logout"],
     }
-    return render(request, 'auth_form.html', context)
+    return render(request, 'update_form.html', context)

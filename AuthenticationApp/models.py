@@ -15,17 +15,17 @@ class MyUserManager(BaseUserManager):
             raise ValueError('Users must have an email address')
         print "In create user"
         print first_name
-	print last_name
+        print last_name
         #We can safetly create the user
         #Only the email field is required
         user = self.model(email=email)
         user.set_password(password)
 
-	user.first_name = first_name
-	user.last_name = last_name
-	user.is_student = is_student
-	user.is_professor = is_professor
-	user.is_engineer = is_engineer
+        user.first_name = first_name
+        user.last_name = last_name
+        user.is_student = is_student
+        user.is_professor = is_professor
+        user.is_engineer = is_engineer
 
         #If first_name is not present, set it as email's username by default
         if first_name is None or first_name == "" or first_name == '':                                
@@ -101,6 +101,9 @@ class MyUser(AbstractBaseUser):
         elif self.is_engineer == True:
             return 'engineer'
 
+    def get_email(self):
+        return self.email
+
 
     @property
     def is_staff(self):
@@ -148,6 +151,15 @@ class Professor(models.Model):
         on_delete=models.CASCADE,
         primary_key=True)
 
+    phone_number = models.CharField(
+        max_length=120,
+        null=True,
+        blank=True,
+        )
+
+    def setPhoneNumber(number):
+        phone_number = number
+
     def get_full_name(self):
         return "%s %s" %(self.user.first_name, self.user.last_name)
 
@@ -176,6 +188,15 @@ class Engineer(models.Model):
         MyUser,
         on_delete=models.CASCADE,
         primary_key=True)
+
+    alma_mater = models.CharField(
+        max_length=120,
+        null=True,
+        blank=True,
+        )
+
+    def setAlmaMater(am):
+        alma_mater = am
 
     def get_full_name(self):
         return "%s %s" %(self.user.first_name, self.user.last_name)
