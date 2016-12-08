@@ -10,7 +10,7 @@ from django.db.models.signals import post_save
 
 # Create your models here.
 class MyUserManager(BaseUserManager):
-    def create_user(self, email=None, password=None, first_name=None, last_name=None, is_student=False, is_professor=False, is_engineer=False):
+    def create_user(self, email=None, password=None, first_name=None, last_name=None, is_student=False, is_professor=False, is_engineer=False, needs_university=True):
         if not email:
             raise ValueError('Users must have an email address')
         print "In create user"
@@ -69,6 +69,7 @@ class MyUser(AbstractBaseUser):
     is_student = models.BooleanField(default=False,)
     is_professor = models.BooleanField(default=False,)
     is_engineer = models.BooleanField(default=False,)
+    needs_university = models.BooleanField(default=True,)
 
     objects = MyUserManager()
 

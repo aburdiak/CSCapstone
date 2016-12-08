@@ -63,6 +63,7 @@ def getUniversityFormSuccess(request):
 
 def joinUniversity(request):
     if request.user.is_authenticated():
+        request.user.needs_university = False
         in_name = request.GET.get('name', 'None')
         in_university = models.University.objects.get(name__exact=in_name)
         in_university.members.add(request.user)
@@ -78,6 +79,7 @@ def joinUniversity(request):
     
 def unjoinUniversity(request):
     if request.user.is_authenticated():
+        request.user.needs_university = True
         in_name = request.GET.get('name', 'None')
         in_university = models.University.objects.get(name__exact=in_name)
         in_university.members.remove(request.user)

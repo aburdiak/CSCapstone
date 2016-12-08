@@ -69,14 +69,18 @@ def auth_register(request):
 
 	    print "pre instantiation " + form.cleaned_data['firstname']
 	    print "pre instantiation " + form.cleaned_data['role']
-
+        n_uni = True
+        if role == 'engineer':
+            n_uni = False
         new_user = MyUser.objects.create_user(email=form.cleaned_data['email'],
                                               password=form.cleaned_data["password2"],
                                               first_name=form.cleaned_data['firstname'], last_name=form.cleaned_data['lastname'],
-                                              is_student=student, is_professor=professor, is_engineer=engineer)
+                                              is_student=student, is_professor=professor, is_engineer=engineer, needs_university=n_uni)
+
 
         print "post instatiation " + form.cleaned_data['firstname']
         #print "post instantiation " + new_user.first_name
+
         new_user.save()
         #Also registering students
         if role == 'student':
