@@ -11,7 +11,7 @@ from django.db.models.signals import post_save
 # Create your models here.
 class MyUserManager(BaseUserManager):
     def create_user(self, email=None, password=None, first_name=None, last_name=None, is_student=False,
-                    is_professor=False, is_engineer=False, needs_university=True, needs_company=True):
+                    is_professor=False, is_engineer=False, needs_university=False, needs_company=False):
         if not email:
             raise ValueError('Users must have an email address')
         print "In create user"
@@ -72,8 +72,8 @@ class MyUser(AbstractBaseUser):
     is_student = models.BooleanField(default=False,)
     is_professor = models.BooleanField(default=False,)
     is_engineer = models.BooleanField(default=False,)
-    needs_university = models.BooleanField(default=True,)
-    needs_company = models.BooleanField(default=True, )
+    needs_university = models.BooleanField(default=False,)
+    needs_company = models.BooleanField(default=False, )
 
     objects = MyUserManager()
 
@@ -129,7 +129,13 @@ class Student(models.Model):
 
     grad_year = models.CharField(
         max_length=120,
-        null=True,
+        default="No grad year",
+        blank=True,
+        )
+
+    university = models.CharField(
+        max_length=120,
+        default="No university",
         blank=True,
         )
 
@@ -165,11 +171,15 @@ class Professor(models.Model):
 
     phone_number = models.CharField(
         max_length=120,
-        null=True,
+        default="No phone number",
         blank=True,
     )
 
-
+    university = models.CharField(
+        max_length=120,
+        default="No university",
+        blank=True,
+        )
 
     def get_full_name(self):
         return "%s %s" %(self.user.first_name, self.user.last_name)
@@ -202,7 +212,13 @@ class Engineer(models.Model):
 
     alma_mater = models.CharField(
         max_length=120,
-        null=True,
+        default="No alma mater",
+        blank=True,
+        )
+
+    company = models.CharField(
+        max_length=120,
+        default="No company",
         blank=True,
         )
 

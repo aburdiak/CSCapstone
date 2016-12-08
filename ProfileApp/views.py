@@ -19,28 +19,35 @@ def getProfile(request):
         professor_data = models.Professor.objects.filter(user=request.user).values_list()
         professor_data = professor_data[0]
         phone_number = professor_data[1]
+        university = professor_data[2]
         context = {
             'user_name': user_name,
             'user_data': user_data,
             'role': role,
             'role_data': phone_number,
             'role_var' : "Phone Number:",
+            'role_data2': university,
+            'role_var2': "University:",
         }
     elif role == 'student':
         student_data = models.Student.objects.filter(user=request.user).values_list()
         student_data = student_data[0]
         grad_year = student_data[1]
+        university = student_data[2]
         context = {
             'user_name': user_name,
             'user_data': user_data,
             'role': role,
             'role_data': grad_year,
             'role_var' : "Graduation Year:",
+            'role_data2': university,
+            'role_var2': "University:",
         }
     elif role == 'engineer':
         engineer_data = models.Engineer.objects.filter(user=request.user).values_list()
         engineer_data = engineer_data[0]
         alma_mater = engineer_data[1]
+        company = engineer_data[2]
 
         context = {
             'user_name': user_name,
@@ -48,6 +55,8 @@ def getProfile(request):
             'role': role,
             'role_data': alma_mater,
             'role_var' : "Alma Mater",
+            'role_data2': company,
+            'role_var2': "Company:",
         }
 
     return render(request, 'profile.html', context)
