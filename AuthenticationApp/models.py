@@ -30,7 +30,7 @@ class MyUserManager(BaseUserManager):
         #If first_name is not present, set it as email's username by default
         if first_name is None or first_name == "" or first_name == '':                                
             user.first_name = email[:email.find("@")]            
-        
+
         user.save(using=self._db)
         print "End of create user"
         print first_name
@@ -122,6 +122,12 @@ class Student(models.Model):
         on_delete=models.CASCADE,
         primary_key=True)
 
+    grad_year = models.CharField(
+        max_length=120,
+        null=True,
+        blank=True,
+        )
+
     def get_full_name(self):        
         return "%s %s" %(self.user.first_name, self.user.last_name)
 
@@ -151,14 +157,14 @@ class Professor(models.Model):
         on_delete=models.CASCADE,
         primary_key=True)
 
+
     phone_number = models.CharField(
         max_length=120,
         null=True,
         blank=True,
-        )
+    )
 
-    def setPhoneNumber(number):
-        phone_number = number
+
 
     def get_full_name(self):
         return "%s %s" %(self.user.first_name, self.user.last_name)
@@ -195,8 +201,6 @@ class Engineer(models.Model):
         blank=True,
         )
 
-    def setAlmaMater(am):
-        alma_mater = am
 
     def get_full_name(self):
         return "%s %s" %(self.user.first_name, self.user.last_name)
