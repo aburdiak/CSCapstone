@@ -28,6 +28,7 @@ def getProfile(request):
             'role_var' : "Phone Number:",
             'role_data2': university,
             'role_var2': "University:",
+	    'name': user_email,
         }
     elif role == 'student':
         student_data = models.Student.objects.filter(user=request.user).values_list()
@@ -42,7 +43,8 @@ def getProfile(request):
             'role_var' : "Graduation Year:",
             'role_data2': university,
             'role_var2': "University:",
-        }
+            'name': user_email,
+	}
     elif role == 'engineer':
         engineer_data = models.Engineer.objects.filter(user=request.user).values_list()
         engineer_data = engineer_data[0]
@@ -57,6 +59,7 @@ def getProfile(request):
             'role_var' : "Alma Mater",
             'role_data2': company,
             'role_var2': "Company:",
-        }
+            'name': user_email,
+	}
 
     return render(request, 'profile.html', context)

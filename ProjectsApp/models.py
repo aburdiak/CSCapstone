@@ -22,7 +22,7 @@ class Project(models.Model):
     language = models.CharField(max_length=200)
     experience = models.CharField(max_length=200)
     speciality = models.CharField(max_length=200)
-    group_members = models.ManyToManyField(MyUser, null=True)
+    #group_members = models.ManyToManyField(MyUser, null=True)
 
     def __str__(self):
         return self.name

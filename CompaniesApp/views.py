@@ -7,7 +7,8 @@ from django.shortcuts import render
 
 from . import models
 from . import forms
-#from AuthenticationApp import models
+from AuthenticationApp.models import Engineer
+
 
 
 def getCompanies(request):
@@ -73,9 +74,9 @@ def joinCompany(request):
         in_company.save();
         request.user.company_set.add(in_company)
         request.user.save()
-        #eng = models.Engineer(user=request.user)
-        #eng.company = in_company
-        #eng.save()
+        eng = Engineer(user=request.user)
+        eng.company = in_company
+        eng.save()
         context = {
             'company' : in_company,
             'userIsMember': True,
@@ -93,9 +94,9 @@ def unjoinCompany(request):
         in_company.save();
         request.user.company_set.remove(in_company)
         request.user.save()
-        #eng = models.Engineer(user=request.user)
-        #eng.company = "No company"
-        #eng.save()
+        eng = Engineer(user=request.user)
+        eng.company = "No company"
+        eng.save()
         context = {
             'company' : in_company,
             'userIsMember': False,

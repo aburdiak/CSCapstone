@@ -38,12 +38,14 @@ class RegisterForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data.get("email")
         #Check if email exists before
-        try:
+        
+	try:
             exists = MyUser.objects.get(email=email)
             raise forms.ValidationError("This email has already been taken")
         except MyUser.DoesNotExist:
             return email
         except:
+	    print "err email exists"
             raise forms.ValidationError("There was an error, please contact us later")
 
 
