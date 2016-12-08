@@ -36,7 +36,7 @@
 				<div class="panel panel-default">
 					<form method="post" enctype="multipart/form-data" action="/group/adduser?name={{ group.name }}" class="panel-body validate">
         			{% csrf_token %}
-             		<label for="user_email">User Email</label>
+             		<label for="user_email">Add a Student to the class by entering their User Email</label>
              		<input type="text" name="user_email" id="user_email" placeholder="User Email" class="form-control" data-bvalidator="required" data-bvalidator-msg="Comment Required">
             	 	<br>
              		<input type="submit" value="Submit" class="btn btn-primary">
