@@ -14,3 +14,6 @@ def getProjects(request):
 
 def getProject(request):
 	return render(request, 'project.html')
+
+def createProject(request):
+	return render(request, 'create_project.html')
