@@ -27,6 +27,7 @@ def getGroup(request):
             'group' : in_group,
             'userIsMember': is_member,
             'comments': comments_list,
+            'is_student' : request.user.is_student
         }
         return render(request, 'group.html', context)
     # render error page if user is not logged in
@@ -49,6 +50,7 @@ def getGroupFormSuccess(request):
                 new_group.save()
                 context = {
                     'name' : form.cleaned_data['name'],
+                    'is_student': request.user.is_student
                 }
                 return render(request, 'groupformsuccess.html', context)
         else:
@@ -70,6 +72,7 @@ def joinGroup(request):
             'group' : in_group,
             'userIsMember': True,
             'comments': comments_list,
+            'is_student': request.user.is_student
         }
         return render(request, 'group.html', context)
     return render(request, 'autherror.html')
@@ -85,6 +88,7 @@ def unjoinGroup(request):
         context = {
             'group' : in_group,
             'userIsMember': False,
+            'is_student': request.user.is_student
         }
         return render(request, 'group.html', context)
     return render(request, 'autherror.html')
@@ -104,6 +108,7 @@ def addUserByEmail(request):
                 'group': in_group,
                 'userIsMember': is_member,
                 'comments': comments_list,
+                'is_student': request.user.is_student
             }
             user_exists = models.MyUser.objects.filter(email__exact=in_email).exists()
             if user_exists:
@@ -128,6 +133,7 @@ def addUserByEmail(request):
             'form': form,
             'group': in_group,
             'userIsMember': is_member,
+            'is_student': request.user.is_student
         }
 
     return render(request, 'group.html')
@@ -145,6 +151,7 @@ def getComments(request):
             'group' : in_group,
             'userIsMember': is_member,
             'comments': comments_list,
+            'is_student': request.user.is_student
         }
         return render(request, 'group.html', context)
     # render error page if user is not logged in
@@ -168,8 +175,23 @@ def addComment(request):
                 'group': in_group,
                 'userIsMember': is_member,
                 'comments': comments_list,
+                'is_student': request.user.is_student
             }
             return render(request, 'group.html', context)
         else:
             form = forms.GroupCommentForm()
     return render(request, 'group.html')
+
+def deleteGroup(request):
+    if request.user.is_authenticated():
+        in_name = request.GET.get('name', 'None')
+        in_group = models.Group.objects.get(name__exact=in_name)
+        in_group.delete()
+        request.user.group_set.remove(in_group)
+        request.user.save()
+        groups_list = models.Group.objects.all()
+        context = {
+            'groups': groups_list,
+        }
+        return render(request, 'groups.html', context)
+    return render(request, 'autherror.html')
