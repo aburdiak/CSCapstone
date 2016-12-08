@@ -20,7 +20,7 @@
 			<table class="table table-striped sortable">
 				<thead>
 					<tr>
-						<th>Users</th>
+						<th>Members</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -31,7 +31,48 @@
 					{% endfor %}
 				</tbody>
 			</table>
+			{% if userIsMember %}
+				<h4>  Add users by email</h4>
+				<div class="panel panel-default">
+					<form method="post" enctype="multipart/form-data" action="/group/adduser?name={{ group.name }}" class="panel-body validate">
+        			{% csrf_token %}
+             		<label for="user_email">User Email</label>
+             		<input type="text" name="user_email" id="user_email" placeholder="User Email" class="form-control" data-bvalidator="required" data-bvalidator-msg="Comment Required">
+            	 	<br>
+             		<input type="submit" value="Submit" class="btn btn-primary">
+        		</form>
+				</div>
+			{% endif %}
+
+			<table class="table table-striped sortable">
+                <h4>  Comments</h4>
+				<thead>
+                    <tr>
+                      <th style="width: 20%">Time</th>
+                        <th style="width: 20%">User</th>
+						  <th style="width: 60%">Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   {% for item in comments %}
+                   <tr>
+                       <td>{{ item.time }}</td>
+					   <td>{{ item.user }}</td>
+					   <td>{{ item.comment }}</td>
+                   </tr>
+                   {% endfor %}
+                </tbody>
+            </table>
 		</div>
+		<div class="panel panel-default">
+        <form method="post" enctype="multipart/form-data" action="/group/addcomment?name={{ group.name }}" class="panel-body validate">
+        {% csrf_token %}
+             <label for="comment">Leave a Comment</label>
+             <input type="text" name="comment" id="comment" placeholder="Comment" class="form-control" data-bvalidator="required" data-bvalidator-msg="Comment Required">
+             <br>
+             <input type="submit" value="Submit" class="btn btn-primary">
+        </form>
+    </div>
 	</div>
 
 {% endblock %}
