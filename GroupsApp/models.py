@@ -13,3 +13,16 @@ class Group(models.Model):
     
     def __str__(self):
         return self.name
+
+class GroupComment(models.Model):
+    group_name = models.CharField(max_length=30, null=True)
+    user = models.CharField(max_length=30, null=True)
+    time = models.DateTimeField(auto_now=True)
+    comment = models.CharField(max_length=500)
+
+class AddUserByEmail(models.Model):
+    user_email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
