@@ -26,6 +26,7 @@ class MyUserManager(BaseUserManager):
         user.is_student = is_student
         user.is_professor = is_professor
         user.is_engineer = is_engineer
+        user.needs_university = needs_university
 
         #If first_name is not present, set it as email's username by default
         if first_name is None or first_name == "" or first_name == '':                                
