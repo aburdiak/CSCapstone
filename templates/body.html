@@ -22,6 +22,10 @@
 				{% elif user.needs_university == True %}
 					<li><a href="/university/all">Universities</a></li>
 					<li><a href="/logout">Logout</a></li>
+				{% elif user.needs_company == True %}
+					<li><a href="/company/all">Companies</a></li>
+					<li><a href="/company/form">Create Company</a></li>
+					<li><a href="/logout">Logout</a></li>
 				{% else %}
 					<li><a href="/profile">Profile</a></li>
 					<li><a href="/update">Update Profile</a></li>

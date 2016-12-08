@@ -63,6 +63,7 @@ def getCompanyFormSuccess(request):
 
 def joinCompany(request):
     if request.user.is_authenticated():
+        request.user.needs_company = False
         in_name = request.GET.get('name', 'None')
         in_company = models.Company.objects.get(name__exact=in_name)
         in_company.members.add(request.user)
@@ -78,6 +79,7 @@ def joinCompany(request):
     
 def unjoinCompany(request):
     if request.user.is_authenticated():
+        request.user.needs_company = True
         in_name = request.GET.get('name', 'None')
         in_company = models.Company.objects.get(name__exact=in_name)
         in_company.members.remove(request.user)
