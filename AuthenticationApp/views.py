@@ -69,14 +69,21 @@ def auth_register(request):
 
 	    print "pre instantiation " + form.cleaned_data['firstname']
 	    print "pre instantiation " + form.cleaned_data['role']
-
+        n_uni = True
+        n_com = False
+        if role == 'engineer':
+            n_uni = False
+            n_com = True
         new_user = MyUser.objects.create_user(email=form.cleaned_data['email'],
                                               password=form.cleaned_data["password2"],
                                               first_name=form.cleaned_data['firstname'], last_name=form.cleaned_data['lastname'],
-                                              is_student=student, is_professor=professor, is_engineer=engineer)
+                                              is_student=student, is_professor=professor, is_engineer=engineer,
+                                              needs_university=n_uni, needs_company=n_com)
+
 
         print "post instatiation " + form.cleaned_data['firstname']
         #print "post instantiation " + new_user.first_name
+
         new_user.save()
         #Also registering students
         if role == 'student':
@@ -92,9 +99,9 @@ def auth_register(request):
         #print new_student.get_full_name()
         login(request, new_user);
         if role == 'student':
-            messages.success(request, 'Success! Your student account was created.')
+            messages.success(request, 'Please choose your university.')
         elif role == 'professor':
-            messages.success(request, 'Success! Your professor account was created.')
+            messages.success(request, 'Please choose your university.')
         elif role == 'engineer':
             messages.success(request, 'Success! Your engineer account was created.')
         messages.success(request, 'Success! Your account was created.')
@@ -114,21 +121,33 @@ def update_profile(request):
     role = MyUser.get_role(request.user)
     if role == 'student':
         form = UpdateFormStudent(request.POST or None, instance=request.user)
-        print "Set student from"
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Success, your profile was saved!')
+            student = Student(user = request.user)
+            student.grad_year = form.cleaned_data['grad_year']
+            student.save()
     elif role == 'professor':
         form = UpdateFormProfessor(request.POST or None, instance=request.user)
-        print "Set Professor form"
-        Professor.setPhoneNumber(form.cleaned_data['phone_number'])
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Success, your profile was saved!')
+            professor = Professor(user = request.user)
+            professor.phone_number = form.cleaned_data['phone_number']
+            professor.save()
+
     elif role == 'engineer':
         form = UpdateFormEngineer(request.POST or None, instance=request.user)
         print "Set Engineer form"
-        Engineer.setAlmaMater(form.cleaned_data['alma_mater'])
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Success, your profile was saved!')
+            print "form valid"
+            engineer = Engineer(user = request.user)
+            engineer.alma_mater = form.cleaned_data['alma_mater']
+            engineer.save()
 
     print "After Conditionals"
-
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Success, your profile was saved!')
 
     context = {
         "form": form,

@@ -4,7 +4,7 @@ Created by Naman Patwari on 10/4/2016.
 """
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django import forms
-from .models import MyUser
+from .models import MyUser, Professor, Student, Engineer
 
 class LoginForm(forms.Form):
     email = forms.CharField(label='Email')
@@ -57,6 +57,12 @@ class UpdateFormStudent(forms.ModelForm):
 
     #role = forms.CharField(label="Role", initial="Student")
 
+    grad_year = forms.CharField(label="Graduation Year", widget=forms.TextInput, required=False)
+
+    class Meta:
+        model = Student
+        fields = ['grad_year']
+
     class Meta:
         model = MyUser
         fields = ('email', 'password', 'first_name', 'last_name')
@@ -87,7 +93,7 @@ class UpdateFormStudent(forms.ModelForm):
         return first_name
 
 
-class UpdateFormProfessor(forms.ModelForm):
+class UpdateFormProfessor(forms.ModelForm ):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
     password hash display field.
@@ -95,8 +101,10 @@ class UpdateFormProfessor(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
     print "Professor update form"
 
-    #role = forms.CharField(label="Role", initial="Professor")
     phone_number = forms.CharField(label="Phone Number", widget=forms.TextInput, required=False)
+    class Meta:
+        model = Professor
+        fields = ['phone_number']
 
     class Meta:
         model = MyUser
@@ -126,6 +134,7 @@ class UpdateFormProfessor(forms.ModelForm):
             email = self.cleaned_data.get("email")
             return email[:email.find("@")]
         return first_name
+
 
 
 class UpdateFormEngineer(forms.ModelForm):
@@ -139,6 +148,10 @@ class UpdateFormEngineer(forms.ModelForm):
     #role = forms.CharField(label="Role", initial="Engineer")
     alma_mater = forms.CharField(label="Alma Mater", widget=forms.TextInput, required=False)
     class Meta:
+        model = Engineer
+        fields = ['alma_mater']
+
+    class Meta:
         model = MyUser
         fields = ('email', 'password', 'first_name', 'last_name')
 
@@ -166,6 +179,7 @@ class UpdateFormEngineer(forms.ModelForm):
             email = self.cleaned_data.get("email")
             return email[:email.find("@")]
         return first_name
+
 
 
 """Admin Forms"""
