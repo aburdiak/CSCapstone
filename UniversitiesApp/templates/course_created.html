@@ -1,0 +1,15 @@
+{% extends "body.html" %}
+
+{%block content %}
+
+	<meta http-equiv="refresh" content="4;url=/university/coursepage?name={{ university.name }}&course={{ course.tag }}"/>
+
+	<div class="container theme-showcase" role="main">
+		<div class="jumbotron">
+			<h2>Course " {{ course.name }}" was successfully created!"</h2>
+
+			<p>This page wil redirect memtarily...if it does not <a href="/university/coursepage?name={{ university.name }}&course={{ course.name }}">click here!</a></p>
+		</div>
+	</div>
+
+{% endblock %}

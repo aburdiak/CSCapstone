@@ -21,6 +21,8 @@ class RegisterForm(forms.Form):
     firstname = forms.CharField(label="First name", widget=forms.TextInput, required=False)
     lastname = forms.CharField(label="Last name", widget=forms.TextInput, required=False)
 
+    photo = forms.ImageField(label='Profile Picture');
+
     CHOICES=[('student', 'Student'),
              ('professor', 'Professor'),
               ('engineer', 'Engineer')]

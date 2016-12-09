@@ -19,22 +19,23 @@
                 
 	   		{% endif %}
 	     	{% elif userIsProfessor %}
-				<a href="/university/course/remove?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Delete Class</a>
-    			
-				<br>
-				<br>
-				<br>	
-				<div class="panel panel-default">
-					<form method="POST" class="panel-body validate"> {% csrf_token %}
-						
-						{{ form.as_p }}
+			<a href="/university/course/remove?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Delete Class</a>
 
-						<input type="submit" class='btn btn-primary' value="Submit">
+			<!-- Form stuff goes here! --> 
+	    	
+			<h4>Add student by email<h4>	
+			<div class="panel panel-default">
 
-					</form>
-				</div>
-	    	{% endif %}
-	    
+				<form method="post" enctype="multipart/form-data" action="/university/course/student_added?name={{ university.name }}&course={{ course.tag }}" class="panel-body validate"> {% csrf_token %}
+					<label for="student_email">Add a Student to the class by entering their email</label>
+					<input type ="text" name="student_email" id="student_email" placeholder="Student Email" class="form-control" data-bvalidator="required" data-bvalidator-msg="Comment Required">
+					<br>
+					<input type="submit" value="Submit" class="btn btn-primary">
+				</form>
+			</div>
+		{% endif %}
+
+
     </div>
     <div class="container" role="main">
 		<div class="table-responsive">

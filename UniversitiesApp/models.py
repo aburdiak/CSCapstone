@@ -18,18 +18,20 @@ class University(models.Model):
         return self.name
 	
 class Course(models.Model):
-	tag = models.CharField(max_length=10)
-	name = models.CharField(max_length=50)
-	description = models.CharField(max_length=300)
-	university = models.ForeignKey(University, on_delete=models.CASCADE)
-	members = models.ManyToManyField(MyUser)
-	professor = models.CharField(max_length=200, null=True)	
+    tag = models.CharField(max_length=10)
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=300)
+    university = models.ForeignKey(University, on_delete=models.CASCADE)
+    members = models.ManyToManyField(MyUser)
+    professor = models.CharField(max_length=200, null=True)	
 
-	def __str__(self):
-		return self.name
+    def __str__(self):
+	return self.name
 
-class AddStudent(models.Model):
-	email = models.CharField(max_length=200)
+class AddStudentByEmail(models.Model):
+    student_email = models.EmailField(
+        verbose_name='email address',
+	max_length=200,	
+	unique=True,
+    )
 
-	def __str__(self):
-		return self.name

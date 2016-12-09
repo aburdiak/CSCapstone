@@ -29,6 +29,7 @@ class MyUserManager(BaseUserManager):
         user.is_engineer = is_engineer
         user.needs_university = needs_university
         user.needs_company = needs_company
+		
 
         #If first_name is not present, set it as email's username by default
         if first_name is None or first_name == "" or first_name == '':                                
@@ -74,6 +75,14 @@ class MyUser(AbstractBaseUser):
     is_engineer = models.BooleanField(default=False,)
     needs_university = models.BooleanField(default=False,)
     needs_company = models.BooleanField(default=False, )
+
+    photo = models.ImageField(
+        upload_to="static/images",
+	default=0,
+	)
+
+
+  
 
     objects = MyUserManager()
 
@@ -180,6 +189,10 @@ class Professor(models.Model):
         default="No university",
         blank=True,
         )
+
+
+    
+
 
     def get_full_name(self):
         return "%s %s" %(self.user.first_name, self.user.last_name)
