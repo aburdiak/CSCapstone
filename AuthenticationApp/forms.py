@@ -151,9 +151,10 @@ class UpdateFormEngineer(forms.ModelForm):
 
     #role = forms.CharField(label="Role", initial="Engineer")
     alma_mater = forms.CharField(label="Alma Mater", widget=forms.TextInput, required=False)
+    degree = forms.CharField(label="Degree", widget=forms.TextInput, required=False)
     class Meta:
         model = Engineer
-        fields = ['alma_mater']
+        fields = ['alma_mater','degree']
 
     class Meta:
         model = MyUser
